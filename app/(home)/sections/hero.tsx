@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
-
+import { DevTool} from '@hookform/devtools';
 const FormSchema = z.object({
   phone: z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 });
@@ -24,6 +24,9 @@ const FormSchema = z.object({
 export default function Hero() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      phone: '+12916685252'
+    }
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -69,6 +72,7 @@ export default function Hero() {
       <div id="try" className="w-full py-8">
         <div className="w-full relative my-4 flex flex-col space-y-2">
           <div className="preview flex min-h-[350px] w-full justify-center p-10 items-start mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 relative rounded-md border">
+            <DevTool control={form.control} />
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-start">
                 <FormField
